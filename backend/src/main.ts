@@ -15,6 +15,10 @@ async function bootstrap() {
     allowedHeaders: 'Content-Type,Authorization',
   });
   
+  app.options('*', (_, res) => {
+    res.sendStatus(204);
+  });
+  
   
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe({

@@ -9,16 +9,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
   app.enableCors({
-    origin: ['http://localhost:3000', 'https://your-vercel-app.vercel.app'], // Allow both local and deployed frontend
+    origin: 'http://localhost:3000', // Frontend URL
     credentials: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    allowedHeaders: 'Content-Type,Authorization',
   });
-  
-  app.options('*', (_, res) => {
-    res.sendStatus(204);
-  });
-  
   
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe({

@@ -31,7 +31,7 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-const API_URL = 'https://im-global.vercel.app/login';
+const API_URL = 'http://localhost:3001';
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);

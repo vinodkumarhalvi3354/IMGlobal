@@ -5,10 +5,13 @@ const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
+const config_1 = require("@nestjs/config");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    const configService = app.get(config_1.ConfigService);
+    const frontendUrl = configService.get('FRONTEND_URL') || 'http://localhost:3000';
     app.enableCors({
-        origin: 'http://localhost:3000',
+        origin: frontendUrl,
         credentials: true,
     });
     app.use(cookieParser());

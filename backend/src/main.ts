@@ -4,14 +4,21 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config'; 
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+
+  const configService = app.get(ConfigService);
+
+  const frontendUrl = configService.get<string>('FRONTEND_URL') || 'http://localhost:3000'; // Default to localhost if not set
   app.enableCors({
-    origin: 'http://localhost:3000', // Frontend URL
+    origin: frontendUrl,
     credentials: true,
   });
+
+  
+
   
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe({

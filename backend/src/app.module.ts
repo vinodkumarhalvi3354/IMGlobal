@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -6,19 +7,27 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config'; // Import ConfigModule
+
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
+    ConfigModule.forRoot({
+      isGlobal: true, // Make the config globally available
+    }),
+    TypeOrmModule.forRootAsync({
+      useFactory: async (configService: ConfigService) => ({
       type: 'postgres',
       host: 'localhost',
       port: 5432,
       username: 'postgres',
-      password: 'Vinodh@3354',
+      password: configService.get<string>('DB_PASSWORD'),
       database: 'login_app',
       entities: [User],
       synchronize: true, // Only for development
     }),
+    inject: [ConfigService],
+  }),
     AuthModule,
     UsersModule,
   ],
